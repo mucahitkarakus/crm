@@ -1,12 +1,52 @@
-import styles from "./pagination.module.css"
+"use client"
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import styles from "./pagination.module.css";
 
-const Pagination = () => {
+const Pagination = ({ count }) => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const page = searchParams.get("page") || 1;
+  const ITEM_PER_PAGE = 2;
+
+  const hasPrev = ITEM_PER_PAGE * (parseInt(page) - 1) > 0;
+  const hasNext = ITEM_PER_PAGE * (parseInt(page) - 1) + ITEM_PER_PAGE < count;
+
+  const handleChangePage = (type) => {
+    if (isClient) {
+      const params = new URLSearchParams(window.location.search);
+      type === "prev"
+        ? params.set("page", parseInt(page) - 1)
+        : params.set("page", parseInt(page) + 1);
+      router.push(`${pathname}?${params}`);
+    }
+  };
+
   return (
     <div className={styles.container}>
-        <button className={styles.button} disabled>Previos</button>
-        <button className={styles.button}>Next</button>
+      <button
+        className={styles.button}
+        disabled={!hasPrev}
+        onClick={() => handleChangePage("prev")}
+      >
+        Previous
+      </button>
+      <button
+        className={styles.button}
+        disabled={!hasNext}
+        onClick={() => handleChangePage("next")}
+      >
+        Next
+      </button>
     </div>
-  )
-}
+  );
+};
 
-export default Pagination
+export default Pagination;
