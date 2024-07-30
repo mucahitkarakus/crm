@@ -29,27 +29,28 @@ const ProductsPage = async () => {
             <td>Action</td>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  width={40}
-                  height={40}
-                  alt="User Avatar"
-                  className={styles.userImage}
-                />
-                John Doe
-              </div>
-            </td>
-            <td>johndoe@gmail.com</td>
-            <td>15 Agu 2023</td>
-            <td>Admin</td>
-            <td>Active</td>
-             <td>
+       <tbody>
+          {users.map((item, index) => (
+            <tr key={index}>
+              <td>
+                <div className={styles.user}>
+                  <Image
+                    src={item.img || "/noavatar.png"}
+                    alt={item.username}
+                    width={40}
+                    height={40}
+                    className={styles.userImage}
+                  />
+                  {item.username}
+                </div>
+              </td>
+              <td>{item.email}</td>
+              <td>{new Date(item.createdAt).toLocaleDateString('tr-TR')}</td>
+              <td>{item.isAdmin ? "Admin" : "Client"}</td>
+              <td>{item.isActive ? "Active" : "Passive"}</td>
+              <td>
                 <div className={styles.buttons}>
-                  <Link href="/dashboard/users/test">
+                  <Link href={`/dashboard/users/${item._id}`}>
                     <button className={`${styles.button} ${styles.view}`}>View</button>
                   </Link>
                   <Link href="/">
@@ -57,91 +58,8 @@ const ProductsPage = async () => {
                   </Link>
                 </div>
               </td>
-          </tr>
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  width={40}
-                  height={40}
-                  alt="User Avatar"
-                  className={styles.userImage}
-                />
-                John Doe
-              </div>
-            </td>
-            <td>johndoe@gmail.com</td>
-            <td>15 Agu 2023</td>
-            <td>Admin</td>
-            <td>Active</td>
-             <td>
-                <div className={styles.buttons}>
-                  <Link href="/dashboard/users/test">
-                    <button className={`${styles.button} ${styles.view}`}>View</button>
-                  </Link>
-                  <Link href="/">
-                    <button className={`${styles.button} ${styles.delete}`}>Delete</button>
-                  </Link>
-                </div>
-              </td>
-          </tr>
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  width={40}
-                  height={40}
-                  alt="User Avatar"
-                  className={styles.userImage}
-                />
-                John Doe
-              </div>
-            </td>
-            <td>johndoe@gmail.com</td>
-            <td>15 Agu 2023</td>
-            <td>Admin</td>
-            <td>Active</td>
-             <td>
-                <div className={styles.buttons}>
-                  <Link href="/dashboard/users/test">
-                    <button className={`${styles.button} ${styles.view}`}>View</button>
-                  </Link>
-                  <Link href="/">
-                    <button className={`${styles.button} ${styles.delete}`}>Delete</button>
-                  </Link>
-                </div>
-              </td>
-          </tr>
-          <tr>
-            <td>
-              <div className={styles.user}>
-                <Image
-                  src="/noavatar.png"
-                  width={40}
-                  height={40}
-                  alt="User Avatar"
-                  className={styles.userImage}
-                />
-                John Doe
-              </div>
-            </td>
-            <td>johndoe@gmail.com</td>
-            <td>15 Agu 2023</td>
-            <td>Admin</td>
-            <td>Active</td>
-             <td>
-                <div className={styles.buttons}>
-                  <Link href="/dashboard/users/test">
-                    <button className={`${styles.button} ${styles.view}`}>View</button>
-                  </Link>
-                  <Link href="/">
-                    <button className={`${styles.button} ${styles.delete}`}>Delete</button>
-                  </Link>
-                </div>
-              </td>
-          </tr>
+            </tr>
+          ))}
         </tbody>
 
       </table>

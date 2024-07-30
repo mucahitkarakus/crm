@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { User } from "./models";
 import { connectToDb } from './utils';
 
