@@ -3,8 +3,13 @@ import styles from "@/app/ui/dashboard/users/users.module.css"
 import Search from "@/app/ui/dashboard/search/search"
 import Image from "next/image"
 import Pagination from "@/app/ui/dashboard/pagination/pagination"
+import { fetchUsers } from "@/app/lib/data"
 
 const ProductsPage = async () => {
+
+  const users = await fetchUsers()
+  console.log(users)
+
   return (
     <div className={styles.container}>
       <div className={styles.top}>
