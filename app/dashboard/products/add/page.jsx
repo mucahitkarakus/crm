@@ -1,14 +1,33 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Stil dosyasının import edilmesi önemli
+import 'react-toastify/dist/ReactToastify.css'; // Importing the style is important
 import { addProduct } from "@/app/lib/actions";
 import styles from "@/app/ui/dashboard/products/addProduct/addProduct.module.css";
 
 const AddProductPage = () => {
   const [loading, setLoading] = useState(false);
+  const [countdown, setCountdown] = useState(2); // Countdown duration
+  const [toastId, setToastId] = useState(null); // Store the toast ID
   const router = useRouter();
+
+  useEffect(() => {
+    let timer;
+    if (toastId) {
+      timer = setInterval(() => {
+        setCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            router.push('/dashboard/products');
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [toastId, router]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,8 +39,14 @@ const AddProductPage = () => {
     try {
       const response = await addProduct(data);
       if (response.success) {
-        toast.success(response.message || "Product added successfully");
-        router.push('/dashboard/products');
+        const id = toast.success(
+          <div>
+            {response.message || "Product added successfully"}<br />
+            Redirecting in {countdown} seconds
+          </div>,
+          { autoClose: false }
+        );
+        setToastId(id);
       } else {
         toast.error(response.message || "Failed to add product");
       }
@@ -35,7 +60,7 @@ const AddProductPage = () => {
 
   return (
     <div className={styles.container}>
-      <ToastContainer /> 
+      <ToastContainer />
       <form onSubmit={handleSubmit} className={styles.form}>
         <input type="text" placeholder="title" name="title" required />
         <select name="cat">
