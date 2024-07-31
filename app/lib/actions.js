@@ -42,7 +42,6 @@ export const addUser = async (formData) => {
 };
 
 export const updateUser = async (formData) => {
-    console.log(formData)
     const data = Object.fromEntries(formData.entries());
     const { id, username, email, password, phone, address, isAdmin, isActive } = data;
 
@@ -75,7 +74,8 @@ export const deleteUser = async (dataId) => {
 };
 
 export const addProduct = async (data) => {
-    const { title, desc, price, size, img, stock, color } = data;
+    console.log(data, "1")
+    const { title, desc, price, size, img, stock, color, cat } = data;
     
     try {
         await connectToDb();
@@ -96,8 +96,10 @@ export const addProduct = async (data) => {
             size,
             stock,
             img,
-            color
+            color,
+            cat
         });
+        console.log(data, "2")
         
         await newProduct.save();
         return { success: true, message: "Product added successfully" };
@@ -107,7 +109,18 @@ export const addProduct = async (data) => {
     }
 };
 
+export const updateProduct = async (formData) => {
+    const { id, title, desc, price, size,stock, color} = Object.fromEntries(formData.entries());
 
+    try {
+        await connectToDb();
+        const updateFields = { id, title, desc, price, size, stock, color };
+        Object.keys(updateFields).forEach(key => (updateFields[key] === "" || updateFields[key] === undefined) && delete updateFields[key]);
+        await Product.findByIdAndUpdate(id, updateFields, { new: true });
+    } catch (error) {
+        console.error(error);
+    }
+};
 
 export const deleteProduct= async (dataId) => {
     const { id } = Object.fromEntries(dataId);

@@ -2,7 +2,6 @@ const Page = () => {
     const handleForm = async (formData)=> {
         "use server"
         console.log("Hello")
-        console.log(formData)
     }
     return (
     <div>
