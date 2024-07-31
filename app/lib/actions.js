@@ -41,19 +41,10 @@ export const addUser = async (formData) => {
     }
 };
 
-export const deleteUser = async (dataId) => {
-    const { id } = Object.fromEntries(dataId);
-    try {
-        await connectToDb();
-        await User.findByIdAndDelete(id);
-    } catch (error) {
-        return { success: false, message: `Failed to delete user: ${error.message}` };
-    }
-};
 
 export const addProduct = async (data) => {
     const { title, desc, price, size, img, stock, color } = data;
-
+    
     try {
         await connectToDb();
         const existingProduct = await Product.findOne({ $or: [{ title }, { desc }] });
@@ -65,7 +56,7 @@ export const addProduct = async (data) => {
                 return { success: false, message: "Product with this description already exists" };
             }
         }
-
+        
         const newProduct = new Product({
             title,
             desc,
@@ -75,11 +66,31 @@ export const addProduct = async (data) => {
             img,
             color
         });
-
+        
         await newProduct.save();
         return { success: true, message: "Product added successfully" };
     } catch (error) {
         console.log(error);
         return { success: false, message: "Failed to add product" };
+    }
+};
+
+export const deleteUser = async (dataId) => {
+    const { id } = Object.fromEntries(dataId);
+    try {
+        await connectToDb();
+        await User.findByIdAndDelete(id);
+    } catch (error) {
+        return { success: false, message: `Failed to delete user: ${error.message}` };
+    }
+};
+
+export const deleteProduct= async (dataId) => {
+    const { id } = Object.fromEntries(dataId);
+    try {
+        await connectToDb();
+        await Product.findByIdAndDelete(id);
+    } catch (error) {
+        return { success: false, message: `Failed to delete user: ${error.message}` };
     }
 };
