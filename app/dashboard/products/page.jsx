@@ -41,7 +41,7 @@ const ProductsPage = async ({ searchParams }) => {
                     height={40}
                     className={styles.productImage}
                   />
-                  {item.desc}
+                  {item.title}
                 </div>
               </td>
               <td >

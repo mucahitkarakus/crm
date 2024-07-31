@@ -41,22 +41,35 @@ export const addUser = async (formData) => {
     }
 };
 
-export const addProduct = async (formData) => {
-    const { titlr, desc, price, size, img, stock } = Object.fromEntries(formData);
+export const addProduct = async (data) => {
+    const { title, desc, price, size, img, stock, color } = data;
 
     try {
-        connectToDb();
+        await connectToDb();
+        const existingProduct = await Product.findOne({ $or: [{ title }, { desc }] });
+        if (existingProduct) {
+            if (existingProduct.title === title) {
+                return { success: false, message: "Product with this title already exists" };
+            }
+            if (existingProduct.desc === desc) {
+                return { success: false, message: "Product with this description already exists" };
+            }
+        }
+
         const newProduct = new Product({
-            titlr,
+            title,
             desc,
             price,
             size,
             stock,
             img,
+            color
         });
 
         await newProduct.save();
+        return { success: true, message: "Product added successfully" };
     } catch (error) {
         console.log(error);
+        return { success: false, message: "Failed to add product" };
     }
 };
