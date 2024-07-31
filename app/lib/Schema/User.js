@@ -36,37 +36,4 @@ const userSchema = new mongoose.Schema({
     },
 }, { timestamps: true })
 
-const productSchema = new mongoose.Schema({
-    titlr: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    desc: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    price: {
-        type: Number,
-        required: true,
-        min: 0
-    },
-    stock: {
-        type: Number,
-        required: true,
-        min: 0
-    },
-    img: {
-        type: String,
-    },
-    color: {
-        type: String,
-    },
-    size: {
-        type: String,
-    },
-}, { timestamps: true })
-
 export const User = mongoose.models.User || mongoose.model("User", userSchema)
-export const Product = mongoose.models.Product || mongoose.model("Product", productSchema)
