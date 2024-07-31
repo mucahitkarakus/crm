@@ -73,7 +73,7 @@ const AddProductPage = () => {
         <input type="number" placeholder="stock" name="stock" />
         <input type="text" placeholder="color" name="color" />
         <input type="text" placeholder="size" name="size" />
-        <textarea name="desc" id="desc" rows="16" placeholder="Description"></textarea>
+        <textarea name="address" id="address" rows="16" placeholder="Address"></textarea>
         <button type="submit" className={styles.button} disabled={loading}>
           {loading ? 'Submitting...' : 'Submit'}
         </button>

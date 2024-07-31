@@ -41,6 +41,38 @@ export const addUser = async (formData) => {
     }
 };
 
+export const updateUser = async (formData) => {
+    console.log(formData)
+    const data = Object.fromEntries(formData.entries());
+    const { id, username, email, password, phone, address, isAdmin, isActive } = data;
+
+    try {
+        await connectToDb();
+        const updateFields = {
+            username,
+            email,
+            password,
+            phone,
+            address,
+            isAdmin: isAdmin === 'true',
+            isActive: isActive === 'true'
+        };
+        Object.keys(updateFields).forEach(key => (updateFields[key] === "" || updateFields[key] === undefined) && delete updateFields[key]);
+        await User.findByIdAndUpdate(id, updateFields, { new: true }); 
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export const deleteUser = async (dataId) => {
+    const { id } = Object.fromEntries(dataId);
+    try {
+        await connectToDb();
+        await User.findByIdAndDelete(id);
+    } catch (error) {
+        return { success: false, message: `Failed to delete user: ${error.message}` };
+    }
+};
 
 export const addProduct = async (data) => {
     const { title, desc, price, size, img, stock, color } = data;
@@ -75,15 +107,7 @@ export const addProduct = async (data) => {
     }
 };
 
-export const deleteUser = async (dataId) => {
-    const { id } = Object.fromEntries(dataId);
-    try {
-        await connectToDb();
-        await User.findByIdAndDelete(id);
-    } catch (error) {
-        return { success: false, message: `Failed to delete user: ${error.message}` };
-    }
-};
+
 
 export const deleteProduct= async (dataId) => {
     const { id } = Object.fromEntries(dataId);
