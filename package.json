@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/eslint-plugin-next": "14.0.1",
+    "aws4": "^1.13.0",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "env": "^0.0.2",

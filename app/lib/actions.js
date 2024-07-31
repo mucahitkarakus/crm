@@ -41,6 +41,16 @@ export const addUser = async (formData) => {
     }
 };
 
+export const deleteUser = async (dataId) => {
+    const { id } = Object.fromEntries(dataId);
+    try {
+        await connectToDb();
+        await User.findByIdAndDelete(id);
+    } catch (error) {
+        return { success: false, message: `Failed to delete user: ${error.message}` };
+    }
+};
+
 export const addProduct = async (data) => {
     const { title, desc, price, size, img, stock, color } = data;
 

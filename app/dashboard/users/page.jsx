@@ -1,16 +1,29 @@
-import Link from "next/link"
-import styles from "@/app/ui/dashboard/users/users.module.css"
-import Search from "@/app/ui/dashboard/search/search"
-import Image from "next/image"
-import Pagination from "@/app/ui/dashboard/pagination/pagination"
-import { fetchUsers } from "@/app/lib/data"
+import Link from "next/link";
+import styles from "@/app/ui/dashboard/users/users.module.css";
+import Search from "@/app/ui/dashboard/search/search";
+import Image from "next/image";
+import Pagination from "@/app/ui/dashboard/pagination/pagination";
+import { fetchUsers } from "@/app/lib/data";
+import { deleteUser } from "@/app/lib/actions";
+import { toast } from "react-toastify";
 
-const ProductsPage =  async ({ searchParams }) => {
+const UsersPage = async ({ searchParams }) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || 1;
-  const {count, users} = await fetchUsers(q, page);
+  const { count, users } = await fetchUsers(q, page);
 
-
+  const handleDelete = async (id) => {
+    try {
+      const result = await deleteUser(id);
+      if (result.success) {
+        toast.success("User deleted successfully.");
+      } else {
+        toast.error(result.message || "Failed to delete user.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while deleting the user.");
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -31,9 +44,9 @@ const ProductsPage =  async ({ searchParams }) => {
             <td>Action</td>
           </tr>
         </thead>
-       <tbody>
-          {users.map((item, index) => (
-            <tr key={index}>
+        <tbody>
+          {users.map((item) => (
+            <tr key={item._id}>
               <td>
                 <div className={styles.user}>
                   <Image
@@ -55,19 +68,23 @@ const ProductsPage =  async ({ searchParams }) => {
                   <Link href={`/dashboard/users/${item._id}`}>
                     <button className={`${styles.button} ${styles.view}`}>View</button>
                   </Link>
-                  <Link href="/">
-                    <button className={`${styles.button} ${styles.delete}`}>Delete</button>
-                  </Link>
+                  <form action={deleteUser}>
+                    <input type="hidden" name="id" value={item?.id}/>
+                   <button
+                    className={`${styles.button} ${styles.delete}`}
+                  >
+                    Delete
+                  </button>
+                  </form>
                 </div>
               </td>
             </tr>
           ))}
         </tbody>
-
       </table>
-      <Pagination count={count}/>
+      <Pagination count={count} />
     </div>
-  )
-}
+  );
+};
 
-export default ProductsPage
+export default UsersPage;
